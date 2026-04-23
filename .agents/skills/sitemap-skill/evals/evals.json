@@ -1,0 +1,17 @@
+{
+  "skill_name": "sitemap",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我画一下我们产品的 sitemap。这是一个 SaaS 工具，主要功能是团队项目管理。公开页面有：首页、功能介绍、定价、博客、关于我们。登录进去之后有：仪表板、项目列表、单个项目详情、团队成员管理、账单设置、个人设置。另外还有一个登录/注册页。",
+      "expected_output": "A Mermaid graph TD sitemap with subgraphs separating marketing pages from the authenticated app, dashed arrows for auth-gated pages, correct node shapes (stadium for home, rounded for auth pages, asymmetric for any drawers), and a Page Index table below the diagram.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm building a portfolio website for my freelance photography business. Pages I need: Home, Portfolio (with sub-galleries for Wedding, Portrait, and Commercial), About Me, Services & Pricing, Contact, and a Blog section. Can you create the sitemap?",
+      "expected_output": "A Mermaid sitemap showing the 3-level hierarchy (Home → Portfolio → sub-galleries), correct node shapes, a clean subgraph if appropriate, and a Page Index table. No auth pages needed for this site.",
+      "files": []
+    }
+  ]
+}

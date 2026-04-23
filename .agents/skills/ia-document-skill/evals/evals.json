@@ -1,0 +1,17 @@
+{
+  "skill_name": "ia-document",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Please compile an IA document from the following planning session notes:\n\nProject: 'Lumina Studio' — a booking platform for independent photography studios\n\nTarget users:\n- Photographers who want to list their studio space for rent\n- Clients (individuals or businesses) looking to book studio time\n\nNorth star action: Client searches for and books a studio slot.\n\nSitemap (already drawn separately as a Mermaid diagram):\n- Home, Search/Browse Studios, Studio Detail Page, Booking Flow (3 steps: Select Time → Add-ons → Payment), Account (for both user types), Host Dashboard, Blog, About, Help Center\n\nKey user flow: Guest → Search → Studio Detail → Select time slot → Create account or guest checkout → Confirm booking\n\nKey pages: Home, Studio Detail Page, Booking Flow Step 1\n\nFiles named: lumina-studio-ia-2026-03-27.md",
+      "expected_output": "A complete .md IA document with all 6 sections: Project Overview (goal, user table, north star), Sitemap (Mermaid + Page Index), User Flows (at least one flowchart LR diagram), Key Page Wireframes (placeholder ASCII or note that wireframes were generated separately), Content & Feature Inventory table, and Next Steps with concrete recommendations for both design and dev teams.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我们刚刚完成了一个网站的 IA 规划对话，现在需要整理出最终文件。\n\n项目：「拾光书屋」— 一个独立书店的线上平台，同时卖书、做书评、办线下活动。\n\n目标用户：\n- 爱读书的成年用户（25-45岁），寻找精神共鸣的好书\n- 活动参与者，想参加读书会和作者见面会\n\n北极星行动：用户在网站上找到一本书、读到书评，并决定购买或报名活动。\n\nSitemap：首页、书库（分类浏览、搜索）、书籍详情、书评专栏（文章列表、文章详情）、活动（活动列表、活动详情、报名）、关于书屋、用户中心（需登录：订单、收藏、报名记录）\n\n核心用户流程：新用户通过书评文章发现书屋 → 浏览书库 → 找到感兴趣的书 → 加入购物车 → 结算\n\n关键页面：首页、书籍详情页、书评文章页\n\n文件名：shiguang-bookstore-ia-2026-03-27.md",
+      "expected_output": "A complete .md IA document in Chinese (matching the language of the request), with all 6 sections properly filled. The document should feel like a professional handoff deliverable, not just a dump of raw notes.",
+      "files": []
+    }
+  ]
+}

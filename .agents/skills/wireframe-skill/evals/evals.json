@@ -1,0 +1,17 @@
+{
+  "skill_name": "wireframe",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我给一个健身追踪 App 的首页画线框图。首页需要包含：顶部导航（Logo、今日目标、用户头像）、一个主 Hero 区域显示今天的运动进度、下方有推荐训练计划的卡片列表（每个卡片有封面图、标题、时长、难度）、底部固定导航栏（首页、训练、记录、我的）。",
+      "expected_output": "An ASCII wireframe using the correct notation symbols ([buttons], {text}, (inputs), ~~~ images ~~~), with a clear section structure for Navbar, Hero, Content Cards, and Bottom Nav. A Section Notes table explaining each section's purpose should follow the wireframe.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I need a wireframe for a SaaS product's pricing page. It should have: a top header with plan toggle (Monthly/Annual), three pricing tiers side by side (Starter, Pro, Enterprise), a feature comparison table below, a FAQ section, and a final CTA banner at the bottom.",
+      "expected_output": "An ASCII wireframe with correct notation, showing the toggle, 3-column pricing cards (adapted well to ASCII), the comparison table, FAQ accordion-style items, and CTA section. Section Notes table included.",
+      "files": []
+    }
+  ]
+}
