@@ -59,7 +59,16 @@ yixian/
 │   └── xidi-resource-inventory-2026-04-28.md
 │
 ├── projects/xidi-secret-archive/   # ★ 当前开发项目
-│   ├── public/assets/          # 美术素材（brand/characters/scenes/props/effects/audio）
+│   ├── assets/                 # 项目素材目录（按素材类别物理分层）
+│   │   ├── RESOURCE_CATALOG.md # 人读索引（类别 + 时间线）
+│   │   ├── assets-manifest.json # 机读清单（路径/章节/优先级）
+│   │   ├── img_01_quiz/        # 谜题素材（P0）
+│   │   ├── img_02_item/        # 道具图标（P0）
+│   │   ├── img_03_food/        # 美食场景（P0）
+│   │   ├── img_04_npc/         # NPC立绘（P1）
+│   │   ├── img_05_ui/          # UI资源（P1）
+│   │   └── img_06_special/     # 支线彩蛋（P2）
+│   ├── public/assets/          # 运行时静态素材出口（构建/发布使用）
 │   ├── src/                    # 按依赖层分包 ↓
 │   │   ├── types/              #   L1 类型定义（mission, game）
 │   │   ├── config/             #   L2 静态配置（missions, stamps, theme, constants）
@@ -78,6 +87,7 @@ yixian/
 ```
 
 - 依赖层严格单向：`types → config → repo → service → runtime → ui`，禁止逆向引用
+- assets/ 采用“双视图”管理：物理目录按素材类别；逻辑组织按章节时间线（以 `RESOURCE_CATALOG.md` / `assets-manifest.json` 为准）
 - 视觉规范：双生视界（日间空灵卷轴 ⇄ 夜间赛博遗迹），见 `docs/xidi-secret-archive/xidi-mvp-visual-scheme-2026-04-28.md`
 - ★ **视觉升级是开发重点**——严格对标视觉方案中的流体背景、日夜切换、Glitch 动效等要求
 
@@ -94,3 +104,11 @@ yixian/
 5. 禁止用 `EnterWorktree`/`ExitWorktree` 管 sprint worktree（它们管 `.claude/worktrees/`）
 6. Worktree 健康检查由 Stop hook 自动运行；也可随时 `/sprint-worktree status`
 7. 本项目目前阶段只追求在移动端的网页打开，运行，后续可能转成微信小程序，但只要这条规则存在就默认在移动端网页中跑
+
+## 资源管理工作习惯（项目级）
+
+1. 素材新增或重命名时，必须同时更新 `projects/xidi-secret-archive/assets/RESOURCE_CATALOG.md` 与 `projects/xidi-secret-archive/assets/assets-manifest.json`
+2. 主目录文档保留“每图一行简注释”，详细文案仅写入各子目录 `README.md`，禁止把长文案回填到主索引
+3. 物理素材目录一律按类别落盘（`img_01`~`img_06`），禁止按章节新建并行物理目录；章节需求通过时间线索引表达
+4. 前端代码引用素材优先使用 manifest 中的 `path`，避免硬编码散落路径
+5. 提交前至少执行一次资源一致性检查：索引存在、manifest 有记录、文件真实落盘、命名符合目录约定
