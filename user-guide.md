@@ -5,7 +5,10 @@
 3. **架构语义与视觉配方**：使用 `/ia-planner` 读取 PRD 以生成基础高密度的内容体系流向（无需且禁止画 ASCII 几何图）；然后通过呼叫 `/visual-explorer` 对接，输出前端友好且包含强约束 Design Tokens 的规范。
 
 4. **技术决策与架构对齐**：使用 `tech-stack` 工具或步骤决定技术选型后，再根据现在的 PRD 和 IA 生成**系统架构图**。关键约束：**此处生成的架构设计必须严格依照 `AGENTS.md` 中设定的依赖层级（`types → config → repo → service → runtime → ui`）进行六层规划。**
+
 5. **项目启动配置**：使用 `ready-to-start` skill 完成项目启动（包括文件夹结构配置，确保检查基础配置：Node，Python，Git，Docker，以及 hooks，Playwright，Chrome Extension，CLAUDE.md / AGENTS.md 等等）。
+
+6. 使用/resource-inventory来准备所有需要的素材资源
 
 ### 阶段二：三 Agent 循环开发
 
@@ -19,3 +22,4 @@
 定期使用garbage-collection skill来检查项目是否存在冗余文件或者矛盾，并进行清理
 
 出错时/或者claude.md（AGENTS.md）的项目目录结构部分需要更新时使用claudemd-updater skill（Kimi 用户使用 protocol-updater）（当卡住，思考what tool is missing）来工程化避免错误
+

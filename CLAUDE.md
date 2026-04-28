@@ -49,30 +49,33 @@ types → config → repo → service → runtime → ui
 ## 仓库目录结构
 
 ```
-harness_model/
+yixian/
 ├── CLAUDE.md / AGENTS.md      # Dev protocol（内容同步）
-├── README.md                  # 流程总览 & 快速上手
 ├── user-guide.md              # 给用户的详细工作流指南
 │
 ├── .agents/
 │   ├── skills/                # 可复用 skill 定义 (SKILL.md × N)
 │   └── workflows/             # 工作流定义 (*.md)
 │
-├── docs/                      # 项目文档（PRD、IA、视觉方案）
-│   └── {project}/             # 按项目归档
+├── docs/                      # 项目文档
+│   ├── xidi-secret-archive/   # 西递秘档：PRD、IA、视觉方案、tech-stack
+│   └── xidi-resource-inventory-2026-04-28.md  # 美术素材资源清单（62项）
 │
-├── projects/                  # 用本流程实验性开发的项目
-│   └── {project-name}/        # 独立项目目录
-│       ├── src/               # 按依赖层分包
-│       └── tests/e2e/         # Playwright 测试
+├── projects/xidi-secret-archive/  # 当前开发项目
+│   ├── public/assets/         # 美术素材（brand/characters/scenes/props/effects/audio）
+│   ├── src/                   # 按依赖层分包：types → config → repo → service → runtime → ui
+│   │   └── ui/overlays/      # ★ 弹窗交互层（LBSOverlay, PlotDialog, PuzzleView, StampPanel）
+│   ├── tests/e2e/             # Playwright E2E 测试
+│   └── index.html             # 现有 HTML 原型（待重构）
 │
-└── tools/
-    └── ce-validator/          # Chrome Extension 验收工具
+└── tools/ce-validator/        # Chrome Extension 验收工具
 ```
 
 - src/ 子目录严格对应依赖层级：`types → config → repo → service → runtime → ui`
-- UI 页面：capture(捕获) / processing(处理预览) / gallery(长廊) / detail(拼贴详情) / prompt(灵感扭蛋)
-- 视觉规范见 `docs/harbor_journal-visual-scheme-2026-04-19.md`
+- UI 页面：MapHome（沉浸式地图主页，唯一常驻）、Achievement（结算成就页）
+- 弹窗层：LBSOverlay → PlotDialog / PuzzleView / StampPanel / StampEffect
+- 视觉规范：双生视界（日间空灵卷轴 ⇄ 夜间赛博遗迹），见 `docs/xidi-secret-archive/xidi-mvp-visual-scheme-2026-04-28.md`
+- ★ 当前 UI 为基础原型，**视觉升级是开发重点**——严格对标视觉方案中的流体背景、日夜切换、Glitch 动效等要求
 
 > **Note**: `AGENTS.md` 是 `CLAUDE.md` 的副本。Claude Code 读取 `CLAUDE.md`；Kimi 读取 `AGENTS.md`。修改 `CLAUDE.md` 后需手动同步到 `AGENTS.md`（或使用 `protocol-updater` / `claudemd-updater` skill）。
 
