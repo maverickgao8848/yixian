@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>西递秘档 · 地图</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link rel="stylesheet" href="../styles/components.css">
+  <style>
+    /* ---- Map Layer ---------------------------------------- */
+    .map-layer {
+      position: absolute;
+      inset: 0;
+      background: url('../../../assets/map.png') center/cover no-repeat;
+      z-index: 1;
+    }
+
+    .map-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg-core);
+      opacity: 0.15;
+      mix-blend-mode: multiply;
+    }
+
+    .map-layer.grayscale {
+      filter: grayscale(100%) contrast(80%) brightness(60%);
+    }
+
+    /* ---- Top Mission Card --------------------------------- */
+    .mission-area {
+      position: absolute;
+      top: 48px;
+      left: var(--space-md);
+      right: var(--space-md);
+      z-index: 10;
+    }
+
+    .mission-card {
+      box-shadow: var(--shadow-hard);
+      transform: translateX(-8px);
+    }
+
+    .mission-card + .mission-card {
+      margin-top: var(--space-md);
+      transform: translateX(8px);
+    }
+
+    .mission-progress {
+      display: flex;
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+    }
+
+    .mission-progress__bar {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+    }
+
+    .mission-progress__bar.active {
+      background: var(--accent);
+    }
+
+    /* ---- Direction Indicator ------------------------------ */
+    .direction-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .direction-arrow {
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      color: var(--accent);
+      background: rgba(235, 232, 227, 0.8);
+      animation: pulse-accent 2.5s infinite;
+    }
+
+    .direction-label {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
+      padding: var(--space-xs) var(--space-sm);
+      border: 1px solid var(--border);
+    }
+
+    /* ---- User Location ------------------------------------ */
+    .user-location {
+      position: absolute;
+      bottom: 35%;
+      left: 40%;
+      z-index: 10;
+    }
+
+    .user-dot {
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border: 2px solid var(--bg-surface);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.2);
+      animation: pulse-accent 2s infinite;
+    }
+
+    /* ---- Stamps Panel Modal ------------------------------- */
+    .stamps-panel .modal__body {
+      text-align: center;
+    }
+
+    .stamps-panel__title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .stamps-panel__subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xl);
+    }
+
+    .stamp-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .stamp-slot__name {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    .stamp-slot__name.earned {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* ---- Encyclopedia Toast ------------------------------- */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: var(--space-lg) var(--space-xl);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.1s ease;
+    }
+
+    .toast.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .toast__text {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .toast__sub {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--text-secondary);
+      margin-top: var(--space-xs);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="film-grain"></div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换日间/夜间">D/L</button>
+
+  <div class="app-container" id="app">
+    <!-- Map Layer -->
+    <div class="map-layer" id="mapLayer"></div>
+
+    <!-- Mission Cards (Staggered) -->
+    <div class="mission-area">
+      <div class="mission-card reveal-up stagger-1">
+        <div class="mission-card__chapter">当前任务 · 第一幕</div>
+        <div class="mission-card__title">寻访胡文光刺史牌楼</div>
+        <div class="mission-card__target">目标地点：村口广场</div>
+        <div class="mission-progress">
+          <div class="mission-progress__bar active"></div>
+          <div class="mission-progress__bar"></div>
+          <div class="mission-progress__bar"></div>
+        </div>
+      </div>
+      <div class="mission-card reveal-up stagger-2">
+        <div class="label-mono" style="margin-bottom: var(--space-xs);">GPS: 29.9041°N, 117.9903°E</div>
+        <div class="body-text" style="font-size: 0.812rem;">沿石板路向东行进约 120 米，注意左侧马头墙轮廓。</div>
+      </div>
+    </div>
+
+    <!-- Direction Indicator -->
+    <div class="direction-indicator reveal-up stagger-3">
+      <div class="direction-arrow">↑</div>
+      <div class="direction-label">向东 120m</div>
+    </div>
+
+    <!-- User Location -->
+    <div class="user-location reveal-up stagger-4">
+      <div class="user-dot"></div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="openStampsPanel()">
+        <div class="nav-btn__icon">印</div>
+        <div class="nav-btn__label">印章</div>
+      </button>
+      <button class="nav-btn" onclick="openWikiToast()">
+        <div class="nav-btn__icon">志</div>
+        <div class="nav-btn__label">百科</div>
+      </button>
+    </nav>
+
+    <!-- Stamps Panel Overlay -->
+    <div class="overlay overlay--center" id="stampsOverlay">
+      <div class="modal stamps-panel">
+        <div class="modal__header">
+          <div>
+            <div class="stamps-panel__title">明经印收集进度</div>
+            <div class="stamps-panel__subtitle">Archive Stamps Collection</div>
+          </div>
+          <button class="btn btn--small btn--ghost" onclick="closeStampsPanel()">关闭</button>
+        </div>
+        <div class="modal__body">
+          <div class="stamp-grid">
+            <div class="stamp-slot">
+              <div class="stamp stamp--earned">
+                <div class="stamp__inner">牌楼</div>
+              </div>
+              <div class="stamp-slot__name earned">胡文光印</div>
+            </div>
+            <div class="stamp-slot">
+              <div class="stamp stamp--locked">
+                <div class="stamp__inner">???</div>
+              </div>
+              <div class="stamp-slot__name">待解锁</div>
+            </div>
+            <div class="stamp-slot">
+              <div class="stamp stamp--locked">
+                <div class="stamp__inner">???</div>
+              </div>
+              <div class="stamp-slot__name">待解锁</div>
+            </div>
+          </div>
+          <div class="caption" style="text-align:center; margin-top:var(--space-lg);">
+            集齐三枚印章，揭晓西递秘档最终真相
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wiki Toast -->
+    <div class="toast" id="wikiToast">
+      <div class="toast__text">百科系统</div>
+      <div class="toast__sub">COMING SOON</div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? '' : 'dark');
+    }
+
+    function openStampsPanel() {
+      document.getElementById('stampsOverlay').classList.add('active');
+    }
+
+    function closeStampsPanel() {
+      document.getElementById('stampsOverlay').classList.remove('active');
+    }
+
+    function openWikiToast() {
+      const toast = document.getElementById('wikiToast');
+      toast.classList.add('active');
+      setTimeout(() => toast.classList.remove('active'), 1500);
+    }
+
+    // Close overlay on backdrop click
+    document.getElementById('stampsOverlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeStampsPanel();
+    });
+  </script>
+</body>
+</html>

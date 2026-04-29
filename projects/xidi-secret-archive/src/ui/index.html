@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>西递秘档 · 设计预览</title>
+  <link rel="stylesheet" href="styles/design-system.css">
+  <style>
+    .preview-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+      gap: var(--space-xl);
+    }
+
+    .preview-title {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 2.5rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+
+    .preview-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-lg);
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .preview-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: var(--space-lg);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: var(--transition-fast);
+      position: relative;
+    }
+
+    .preview-card:hover {
+      background: var(--primary);
+      color: var(--text-inverse);
+      border-color: var(--primary);
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-hard);
+    }
+
+    .preview-card__num {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .preview-card:hover .preview-card__num {
+      color: var(--text-inverse);
+    }
+
+    .preview-card__title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 0.03em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .preview-card__desc {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .preview-card:hover .preview-card__desc {
+      color: rgba(235, 232, 227, 0.7);
+    }
+
+    .preview-card__arrow {
+      position: absolute;
+      bottom: var(--space-md);
+      right: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="film-grain"></div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换日间/夜间">D/L</button>
+
+  <div class="app-container preview-page">
+    <div style="text-align:center;">
+      <div class="ink-seal" style="margin-bottom:var(--space-md);">绝密</div>
+      <h1 class="preview-title">西递秘档</h1>
+      <div class="preview-subtitle" style="margin-top:var(--space-sm);">Frontend Design Preview</div>
+    </div>
+
+    <div class="preview-grid">
+      <a class="preview-card" href="pages/map-home.html">
+        <div class="preview-card__num">01 / 地图主页</div>
+        <div class="preview-card__title">沉浸式地图</div>
+        <div class="preview-card__desc">任务指引、LBS定位、印章面板入口、百科入口</div>
+        <div class="preview-card__arrow">→</div>
+      </a>
+
+      <a class="preview-card" href="pages/interaction-overlay.html">
+        <div class="preview-card__num">02 / 交互层</div>
+        <div class="preview-card__title">剧情与解谜</div>
+        <div class="preview-card__desc">NPC对话推进、实景观察题、盖章结算动效</div>
+        <div class="preview-card__arrow">→</div>
+      </a>
+
+      <a class="preview-card" href="pages/achievement.html">
+        <div class="preview-card__num">03 / 终章</div>
+        <div class="preview-card__title">结算与成就</div>
+        <div class="preview-card__desc">剧情总结、三印合集、海报生成、分享CTA</div>
+        <div class="preview-card__arrow">→</div>
+      </a>
+    </div>
+
+    <div class="caption" style="text-align:center; margin-top:var(--space-xl);">
+      点击卡片预览各页面 · 右上角 D/L 切换日间/夜间模式
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? '' : 'dark');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>西递秘档 · 剧情</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link rel="stylesheet" href="../styles/components.css">
+  <style>
+    /* ---- Scene States ------------------------------------- */
+    .scene {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-md);
+      overflow-y: auto;
+    }
+
+    .scene.hidden { display: none; }
+
+    /* ---- Map Backdrop (Grayscale) ------------------------ */
+    .map-backdrop {
+      position: absolute;
+      inset: 0;
+      background: url('../../../assets/map.png') center/cover no-repeat;
+      filter: grayscale(100%) contrast(80%) brightness(40%);
+      z-index: 1;
+    }
+
+    /* ---- Scene Header ------------------------------------- */
+    .scene-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+      padding-top: var(--space-lg);
+    }
+
+    .scene-tag {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-inverse);
+      background: var(--accent);
+      padding: var(--space-xs) var(--space-sm);
+    }
+
+    .scene-close {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: var(--text-inverse);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---- NPC Scene ---------------------------------------- */
+    .npc-scene {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: var(--space-xl);
+    }
+
+    .npc-portrait {
+      width: 120px;
+      height: 160px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: linear-gradient(180deg, rgba(26,28,29,0.6) 0%, rgba(26,28,29,0.9) 100%);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      position: relative;
+    }
+
+    .npc-portrait::before {
+      content: 'NPC';
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    .npc-dialog-area {
+      background: rgba(19, 22, 21, 0.85);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: var(--space-lg);
+    }
+
+    .npc-dialog-area .dialog__name {
+      color: var(--accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .npc-dialog-area .dialog__text {
+      color: var(--text-inverse);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .npc-actions {
+      display: flex;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .npc-actions .btn {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-inverse);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .npc-actions .btn:hover {
+      background: var(--accent);
+      color: var(--text-inverse);
+      border-color: var(--accent);
+    }
+
+    /* ---- Puzzle Scene ------------------------------------- */
+    .puzzle-scene {
+      background: var(--bg-surface);
+      margin: auto 0;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-hard);
+    }
+
+    .puzzle-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .puzzle-image__placeholder {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .puzzle-image__scanner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .puzzle-content {
+      padding: var(--space-lg);
+    }
+
+    .puzzle-question {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      margin-bottom: var(--space-lg);
+      letter-spacing: 0.02em;
+    }
+
+    .puzzle-feedback {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .puzzle-feedback.show {
+      display: block;
+    }
+
+    .puzzle-feedback.error {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(211, 47, 47, 0.05);
+    }
+
+    /* ---- Result Scene (Stamp) ----------------------------- */
+    .result-scene {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .result-stamp-container {
+      width: 140px;
+      height: 140px;
+      border: 3px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-xl);
+      position: relative;
+      background: rgba(19, 22, 21, 0.6);
+    }
+
+    .result-stamp-container::before,
+    .result-stamp-container::after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(211, 47, 47, 0.3);
+    }
+
+    .result-stamp-container::before {
+      inset: 8px;
+    }
+
+    .result-stamp-container::after {
+      inset: 16px;
+    }
+
+    .result-stamp-text {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 2rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+    }
+
+    .result-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-inverse);
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .result-desc {
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: var(--space-xl);
+      max-width: 280px;
+    }
+
+    .result-actions .btn {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      padding: var(--space-md) var(--space-xl);
+    }
+
+    .result-actions .btn:hover {
+      background: var(--text-inverse);
+      color: var(--primary);
+      border-color: var(--text-inverse);
+    }
+
+    /* ---- Decorative Elements ------------------------------ */
+    .corner-mark {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 0.5rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.1em;
+    }
+
+    .corner-mark--tl { top: var(--space-md); left: var(--space-md); }
+    .corner-mark--tr { top: var(--space-md); right: var(--space-md); }
+    .corner-mark--bl { bottom: var(--space-md); left: var(--space-md); }
+    .corner-mark--br { bottom: var(--space-md); right: var(--space-md); }
+  </style>
+</head>
+<body>
+  <div class="film-grain"></div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换日间/夜间">D/L</button>
+
+  <div class="app-container">
+    <div class="map-backdrop"></div>
+
+    <!-- Decorative Corner Marks -->
+    <div class="corner-mark corner-mark--tl">SEC-001</div>
+    <div class="corner-mark corner-mark--tr">29.9041°N</div>
+    <div class="corner-mark corner-mark--bl">117.9903°E</div>
+    <div class="corner-mark corner-mark--br">LBS ACTIVE</div>
+
+    <!-- Scene 1: NPC Dialog -->
+    <div class="scene" id="sceneDialog">
+      <div class="scene-header">
+        <div class="scene-tag">剧情推进</div>
+        <button class="scene-close" onclick="location.href='map-home.html'">×</button>
+      </div>
+      <div class="npc-scene">
+        <div class="npc-portrait"></div>
+        <div class="npc-dialog-area">
+          <div class="dialog__name">守档人 · 胡老伯</div>
+          <div class="dialog__text" id="dialogText">
+            年轻人，你脚下的这块青石板，胡氏宗族走了四百多年。牌楼上的「胶州刺史」四个字，你可看仔细了——<br><br>
+            那不只是个官职，那是明经胡氏一族的<span class="redacted">荣耀与枷锁</span>。
+          </div>
+        </div>
+        <div class="npc-actions">
+          <button class="btn btn--block" onclick="nextDialog()">继续聆听</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 2: Puzzle -->
+    <div class="scene hidden" id="scenePuzzle">
+      <div class="scene-header">
+        <div class="scene-tag">实地解谜</div>
+        <button class="scene-close" onclick="location.href='map-home.html'">×</button>
+      </div>
+      <div class="puzzle-scene">
+        <div class="puzzle-image">
+          <div class="puzzle-image__placeholder">[实景观察图占位]</div>
+          <div class="puzzle-image__scanner scanner-line"></div>
+        </div>
+        <div class="puzzle-content">
+          <div class="puzzle-question">
+            仰头观察胡文光刺史牌楼，匾额四周雕刻的图案是什么？
+          </div>
+          <div class="puzzle-feedback" id="puzzleFeedback"></div>
+          <div class="quiz-options" id="quizOptions">
+            <button class="quiz-option" data-index="A" onclick="selectOption(this)">
+              <span class="quiz-option__index">A</span>
+              <span class="quiz-option__text">双龙戏珠</span>
+            </button>
+            <button class="quiz-option" data-index="B" onclick="selectOption(this)">
+              <span class="quiz-option__index">B</span>
+              <span class="quiz-option__text">麒麟送子</span>
+            </button>
+            <button class="quiz-option" data-index="C" onclick="selectOption(this)">
+              <span class="quiz-option__index">C</span>
+              <span class="quiz-option__text">双狮滚球</span>
+            </button>
+            <button class="quiz-option" data-index="D" onclick="selectOption(this)">
+              <span class="quiz-option__index">D</span>
+              <span class="quiz-option__text">凤凰牡丹</span>
+            </button>
+          </div>
+          <button class="btn btn--primary btn--block btn--hard-shadow" style="margin-top:var(--space-lg);" id="submitBtn" onclick="submitAnswer()" disabled>
+            提交答案
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 3: Result / Stamp -->
+    <div class="scene hidden" id="sceneResult">
+      <div class="result-scene">
+        <div class="result-stamp-container stamp-anim" id="stampAnim">
+          <div class="result-stamp-text">牌楼</div>
+        </div>
+        <div class="result-title reveal-up stagger-1">胡文光印 · 已收录</div>
+        <div class="result-desc reveal-up stagger-2">
+          你已破解牌楼秘纹，第一枚明经印收入档案。<br>下一处线索，藏在敬爱堂的天井之下。
+        </div>
+        <div class="result-actions reveal-up stagger-3">
+          <button class="btn btn--hard-shadow" onclick="location.href='map-home.html'">继续探索</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? '' : 'dark');
+    }
+
+    // Dialog flow
+    const dialogs = [
+      "年轻人，你脚下的这块青石板，胡氏宗族走了四百多年。牌楼上的「胶州刺史」四个字，你可看仔细了——<br><br>那不只是个官职，那是明经胡氏一族的<span class='redacted'>荣耀与枷锁</span>。",
+      "成化年间，胡文光以此牌楼昭告乡梓。但你可知，牌楼顶端的五只石雕——那不是装饰，那是<span class='redacted'>五凤</span>。五凤朝天，暗喻胡氏五房分支的气运纠缠。",
+      "【任务触发】<br><br>现在，走近牌楼，抬头观察匾额四周的浮雕。答案关乎胡氏宗族真正的图腾信仰。"
+    ];
+    let dialogIndex = 0;
+
+    function nextDialog() {
+      dialogIndex++;
+      if (dialogIndex < dialogs.length) {
+        document.getElementById('dialogText').innerHTML = dialogs[dialogIndex];
+        if (dialogIndex === dialogs.length - 1) {
+          document.querySelector('.npc-actions .btn').textContent = '开始解谜';
+          document.querySelector('.npc-actions .btn').setAttribute('onclick', 'goToPuzzle()');
+        }
+      }
+    }
+
+    function goToPuzzle() {
+      document.getElementById('sceneDialog').classList.add('hidden');
+      document.getElementById('scenePuzzle').classList.remove('hidden');
+    }
+
+    // Puzzle logic
+    let selectedOption = null;
+    const correctAnswer = 'C';
+    let attemptCount = 0;
+
+    function selectOption(el) {
+      document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedOption = el.dataset.index;
+      document.getElementById('submitBtn').disabled = false;
+    }
+
+    function submitAnswer() {
+      const feedback = document.getElementById('puzzleFeedback');
+      if (selectedOption === correctAnswer) {
+        // Success
+        document.querySelectorAll('.quiz-option').forEach(o => {
+          o.disabled = true;
+          if (o.dataset.index === correctAnswer) o.classList.add('correct');
+        });
+        document.getElementById('submitBtn').textContent = '回答正确';
+        document.getElementById('submitBtn').disabled = true;
+        setTimeout(() => {
+          document.getElementById('scenePuzzle').classList.add('hidden');
+          document.getElementById('sceneResult').classList.remove('hidden');
+        }, 800);
+      } else {
+        // Wrong
+        attemptCount++;
+        const wrongOption = document.querySelector(`.quiz-option[data-index="${selectedOption}"]`);
+        wrongOption.classList.add('wrong');
+        setTimeout(() => wrongOption.classList.remove('wrong'), 400);
+        
+        if (attemptCount >= 2) {
+          feedback.className = 'puzzle-feedback show error';
+          feedback.innerHTML = '提示：正确答案是 <strong>双狮滚球</strong>。牌楼雕刻以瑞狮镇宅，守护胡氏文脉。';
+          document.querySelector(`.quiz-option[data-index="${correctAnswer}"]`).classList.add('correct');
+          document.querySelectorAll('.quiz-option').forEach(o => o.disabled = true);
+          document.getElementById('submitBtn').textContent = '继续';
+          document.getElementById('submitBtn').onclick = function() {
+            document.getElementById('scenePuzzle').classList.add('hidden');
+            document.getElementById('sceneResult').classList.remove('hidden');
+          };
+        } else {
+          feedback.className = 'puzzle-feedback show error';
+          feedback.textContent = '观察不够仔细，请再次查看牌楼浮雕细节。';
+        }
+      }
+    }
+  </script>
+</body>
+</html>

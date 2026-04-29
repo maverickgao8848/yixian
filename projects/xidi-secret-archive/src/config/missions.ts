@@ -1,0 +1,132 @@
+import type { Mission } from '../types/mission';
+
+export const missions: Mission[] = [
+  {
+    id: 'prologue',
+    chapter: '序章',
+    title: '寻访明经秘档',
+    subtitle: '接取主线任务',
+    targetLat: 29.9041,
+    targetLng: 117.9903,
+    triggerRadius: 30,
+    dialogs: [
+      {
+        id: 'dlg-p0',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '年轻人，你终于来了。西递村中藏有一份明经胡氏世代守护的秘档，已沉睡百年有余。',
+      },
+      {
+        id: 'dlg-p1',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '当年胡昌翼公弃官归隐，将毕生所学化为三枚印记，分别藏于村中三处要地。',
+      },
+      {
+        id: 'dlg-p2',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '唯有亲临其地、解开谜题，方能逐一收集印记，最终揭晓秘档的真相。',
+      },
+      {
+        id: 'dlg-p3',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '去吧，从村口的牌楼开始你的寻访之旅。切记，用心观察每一处石刻与砖雕，答案就在其中。',
+      },
+    ],
+    puzzle: {
+      question: '西递村始建于哪个朝代？',
+      imageUrl: '/assets/scenes/xidi-entrance.png',
+      options: ['唐朝', '北宋', '明朝', '清朝'],
+      correctIndex: 1,
+      hint: '西递村始建于一千多年前，与胡氏家族的迁徙密切相关。',
+    },
+    stampReward: 'stamp-prologue',
+  },
+  {
+    id: 'mission-1',
+    chapter: '第一幕',
+    title: '胡文光刺史牌楼',
+    subtitle: '寻访与轻量解谜',
+    targetLat: 29.9038,
+    targetLng: 117.9912,
+    triggerRadius: 20,
+    dialogs: [
+      {
+        id: 'dlg-m1-0',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '你面前的这座石牌楼，是明万历年间为表彰胶州刺史胡文光而建，距今已有四百余年。',
+      },
+      {
+        id: 'dlg-m1-1',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '牌楼上雕饰精美，尤以柱础处的石兽最为传神——它们不仅是装饰，更暗含明经胡氏的家训。',
+      },
+      {
+        id: 'dlg-m1-2',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '仔细看看牌楼基座上的石雕瑞兽，告诉我你看到了什么。',
+      },
+    ],
+    puzzle: {
+      question: '胡文光刺史牌楼的柱础上雕刻的是哪种瑞兽？',
+      imageUrl: '/assets/scenes/huguang-arch.png',
+      options: ['石狮', '麒麟', '赑屃', '石象'],
+      correctIndex: 0,
+      hint: '这种瑞兽在古代常被置于建筑之前，象征威严与守护。',
+    },
+    stampReward: 'stamp-huguang',
+  },
+  {
+    id: 'finale',
+    chapter: '终章',
+    title: '观景台·秘档揭晓',
+    subtitle: '集齐印章，揭晓秘档真相',
+    targetLat: 29.9025,
+    targetLng: 117.9908,
+    triggerRadius: 25,
+    dialogs: [
+      {
+        id: 'dlg-f0',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '你已集齐三枚印记，证明你有心有力。现在，站在观景台上俯瞰全村，你看到了什么？',
+      },
+      {
+        id: 'dlg-f1',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '西递之形如船，四面环山，两溪绕村——这便是明经胡氏先祖择居的智慧。',
+      },
+      {
+        id: 'dlg-f2',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '所谓秘档，并非金银财宝，而是刻在每一块砖、每一片瓦中的处世哲学：读书积善、勤俭传家。',
+      },
+      {
+        id: 'dlg-f3',
+        characterName: '胡老夫子',
+        characterImage: '/assets/characters/hu-laofuzi.png',
+        text: '明经胡氏，本为唐昭宗之子，改姓埋名于此。这一段秘密，便是"明经"二字的真正含义。',
+      },
+    ],
+    puzzle: {
+      question: '"明经胡氏"的真正渊源是什么？',
+      imageUrl: '/assets/scenes/observation-deck.png',
+      options: [
+        '胡姓商人建立的书院',
+        '唐昭宗后裔改姓隐居',
+        '宋代科举望族的分支',
+        '明朝赐姓的功臣之后',
+      ],
+      correctIndex: 1,
+      hint: '想一想"明经"二字——明指光明正大，经指经典学问，但真相远比字面更深远。',
+    },
+    stampReward: 'stamp-finale',
+  },
+];
