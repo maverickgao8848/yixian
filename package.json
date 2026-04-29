@@ -1,0 +1,26 @@
+{
+  "name": "yixian",
+  "version": "1.0.0",
+  "description": "Three-Agent development protocol: Planner -> Generator -> Evaluator.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maverickgao8848/yixian.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maverickgao8848/yixian/issues"
+  },
+  "homepage": "https://github.com/maverickgao8848/yixian#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0"
+  }
+}

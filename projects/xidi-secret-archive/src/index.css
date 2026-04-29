@@ -1,3 +1,132 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* 日间模式 — 徽州水墨卷轴 */
+    --bg-primary: #F4EFE6;
+    --bg-secondary: #EDE6DA;
+    --bg-glass: rgba(244, 239, 230, 0.72);
+    --text-primary: #2A2F33;
+    --text-secondary: #5A6369;
+    --accent-primary: #698173;
+    --accent-glow: #E8CA94;
+    --accent-mist: #D6E5ED;
+    --border-subtle: rgba(42, 47, 51, 0.10);
+    --border-strong: rgba(42, 47, 51, 0.25);
+    --shadow-glow: 0 0 15px rgba(232, 202, 148, 0.35);
+
+    --font-serif: 'Noto Serif SC', serif;
+    --font-sans: 'Noto Sans SC', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  [data-theme='night'] {
+    /* 夜间模式 — 赛博数字秘档 */
+    --bg-primary: #0D1114;
+    --bg-secondary: #141B20;
+    --bg-glass: rgba(13, 17, 20, 0.78);
+    --text-primary: #E6E9EB;
+    --text-secondary: #9AA3A8;
+    --accent-primary: #4CF09D;
+    --accent-glow: #FF3366;
+    --accent-mist: #1A2A33;
+    --border-subtle: rgba(76, 240, 157, 0.15);
+    --border-strong: rgba(76, 240, 157, 0.45);
+    --shadow-glow: 0 0 15px rgba(76, 240, 157, 0.35);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #1a1a1a;
+    color: var(--text-primary);
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 移动端容器 */
+  #root {
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #1a1a1a;
+  }
+}
+
+@layer components {
+  .mobile-frame {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100dvh;
+    position: relative;
+    overflow-x: hidden;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                color 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .glass-panel {
+    background-color: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .night-glass-panel {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    color: var(--bg-primary);
+    background-color: var(--accent-primary);
+    border: 1px solid transparent;
+    border-radius: 0;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.3s ease;
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 2px var(--accent-primary), 0 0 12px rgba(105, 129, 115, 0.3);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .text-shadow-ink {
+    text-shadow: 0 2px 8px rgba(42, 47, 51, 0.25);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

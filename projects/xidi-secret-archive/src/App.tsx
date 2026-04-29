@@ -1,8 +1,20 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { MobileFrame } from './ui/components/MobileFrame';
+import { ToastContainer } from './ui/components/ToastContainer';
+import { EntryPage } from './ui/pages/EntryPage';
+import { MapPage } from './ui/pages/MapPage';
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-gray-800">西递秘档</h1>
-    </div>
+    <BrowserRouter>
+      <MobileFrame>
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<EntryPage />} />
+          <Route path="/map" element={<MapPage />} />
+        </Routes>
+      </MobileFrame>
+    </BrowserRouter>
   );
 }
 
