@@ -55,11 +55,11 @@ yixian/
 │
 ├── .agents/                    # Skills & workflows
 ├── docs/                       # 项目文档
-│   ├── xidi-secret-archive/    # PRD / IA / 视觉方案 / tech-stack
-│   └── xidi-resource-inventory-2026-04-28.md
+│   ├── xidi-secret-archive/    # PRD / IA / 视觉方案
+│   └── xidi-resource-inventory-2026-04-29.md
 │
 ├── projects/xidi-secret-archive/   # ★ 当前开发项目
-│   ├── assets/                 # 项目素材目录（按素材类别物理分层）
+│   ├── public/assets/                 # 项目素材目录（按素材类别物理分层）
 │   │   ├── RESOURCE_CATALOG.md # 人读索引（类别 + 时间线）
 │   │   ├── assets-manifest.json # 机读清单（路径/章节/优先级）
 │   │   ├── img_01_quiz/        # 谜题素材（P0）
@@ -68,7 +68,6 @@ yixian/
 │   │   ├── img_04_npc/         # NPC立绘（P1）
 │   │   ├── img_05_ui/          # UI资源（P1）
 │   │   └── img_06_special/     # 支线彩蛋（P2）
-│   ├── public/assets/          # 运行时静态素材出口（构建/发布使用）
 │   ├── src/                    # 按依赖层分包 ↓
 │   │   ├── types/              #   L1 类型定义（mission, game）
 │   │   ├── config/             #   L2 静态配置（missions, stamps, theme, constants）
@@ -112,3 +111,6 @@ yixian/
 3. 物理素材目录一律按类别落盘（`img_01`~`img_06`），禁止按章节新建并行物理目录；章节需求通过时间线索引表达
 4. 前端代码引用素材优先使用 manifest 中的 `path`，避免硬编码散落路径
 5. 提交前至少执行一次资源一致性检查：索引存在、manifest 有记录、文件真实落盘、命名符合目录约定
+
+## 其他
+所有前端开发一律调用frontend-design skill
